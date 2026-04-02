@@ -3,8 +3,6 @@ from collections import deque
 
 
 class ActionStack:
-  
-
     def __init__(self) -> None:
         self.items: list[str] = []
 
@@ -26,8 +24,6 @@ class ActionStack:
 
 
 class RequestQueue:
-
-
     def __init__(self) -> None:
         self.items: deque[str] = deque()
 
@@ -49,8 +45,7 @@ class RequestQueue:
 
 
 def is_note_balanced(note: str) -> bool:
-    """Check if brackets are balanced."""
-    stack = []
+    stack: list[str] = []
     pairs = {')': '(', ']': '[', '}': '{'}
 
     for char in note:
@@ -65,27 +60,19 @@ def is_note_balanced(note: str) -> bool:
 
 
 def process_request_line(citizens: list[str]) -> list[str]:
-    """Return citizens in the order they are served (FIFO)."""
-    queue = RequestQueue()
-    served = []
+    queue = deque(citizens)
+    result: list[str] = []
 
-    for c in citizens:
-        queue.enqueue(c)
+    while queue:
+        result.append(queue.popleft())
 
-    while not queue.is_empty():
-        served.append(queue.dequeue())
-
-    return served
+    return result
 
 
 def undo_recent_actions(actions: list[str], undo_count: int) -> list[str]:
-  
-    stack = ActionStack()
+    stack = actions.copy()
 
-    for action in actions:
-        stack.push(action)
-
-    for _ in range(min(undo_count, len(actions))):
+    for _ in range(min(undo_count, len(stack))):
         stack.pop()
 
-    return stack.items
+    return stack
